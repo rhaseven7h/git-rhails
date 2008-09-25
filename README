@@ -1,0 +1,18 @@
+Home
+Welcome to the git-rails wiki!
+
+It’s easy to use.
+
+It’s a bash shell script, so, just
+
+   1. Be sure to have git installed
+   2. Copy this script to /usr/local/bin
+   3. chmod +x /usr/local/bin/git-rails
+   4. Move to your rails’ project top directory
+   5. type: git-rails, and all the magic is done.
+
+Hope you like it, if you have doubts, questions, suggestions or changes, please mail me at rha7.com[at]gmail.com.
+
+Thanks for visiting.
+
+Gabriel Medina.

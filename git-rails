@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+COLOR_YELLOW="\033[1;33m"
+COLOR_OFF="\033[0m"
+
+([ ! -d app ] || [ ! -d public ] || [ ! -d config ] || [ ! -d vendor ]) && echo "Not a rails root directory." && exit 1
+
+
+[ ! -d .git ] && git init
+
+for DIR in `find . -type d | grep -v '^\./\.git'`; do
+	CNT=`ls -a $DIR | grep -v '\.gitignore' | wc -l`
+	if [ $CNT -le 2 ]; then
+		echo -e "Forcefully added $COLOR_YELLOW$DIR$COLOR_OFF"
+		touch $DIR/.gitignore
+		git add -f $DIR/.gitignore
+	fi
+done
+
+if [ ! -f config/database.yml.dist ]; then
+	cp config/database.yml config/database.yml.dist
+fi
+git add -f config/database.yml.dist
+
+GITIGNORE=''
+
+if [ -f .gitignore ]; then
+	cp .gitignore /tmp/giti
+	cat /tmp/giti |\
+	grep -v 'log/\*.log' |\
+	grep -v 'log/\*.pid' |\
+	grep -v 'db/\*.sqlite3' |\
+	grep -v 'tmp/\*\*/\*' |\
+	grep -v 'config/database.yml' |\
+	grep -v '^ *$' > .gitignore
+	rm -f /tmp/giti
+fi
+
+echo "log/*.log"           >> .gitignore
+echo "log/*.pid"           >> .gitignore
+echo "db/*.sqlite3"        >> .gitignore
+echo "tmp/**/*"            >> .gitignore
+echo "config/database.yml" >> .gitignore
+
+echo ============================================================
+echo New contents of .gitignore
+echo ============================================================
+cat .gitignore
+echo ============================================================
+
+echo "Use git-status to check on added files."
+echo
+
+
